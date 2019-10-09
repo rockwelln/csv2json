@@ -14,7 +14,7 @@ setup(
     python_requires=">=3.6",
     py_modules=["csv2json"],
     entry_points={"console_scripts": ["csv2json=csv2json:main"]},
-    install_requires=[],
+    install_requires=["dataclasses; python_version < '3.7'"],
     extras_require={
         "dev": ["pytest", "pytest-cov", "black", "wheel"],
         "test": ["pytest", "pytest-cov"],
@@ -29,6 +29,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )

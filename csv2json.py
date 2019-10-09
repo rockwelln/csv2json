@@ -192,12 +192,44 @@ def csv2json(input_stream, *, headers=None, options=None) -> List[Dict]:
         yield r
 
 
+class Dict2CsvTranscoder(DictTranscoder):
+    def __init__(self):
+        self.headers = []
+        self.values = []
+
+    def on_leaf(self, e, path):
+        self.headers.append(".".join(path))
+        self.values.append(e)
+        return e
+
+    def on_collection(self, e, path):
+        if len(e) == 0:
+            # todo: should we do something with empty collections?
+            # self.headers.append(".".join(path + ["0"]))
+            # self.values.append()
+            pass
+        return e
+
+
+def json2csv_headers(instr: str):
+    body = json.loads(instr)
+    t = Dict2CsvTranscoder()
+    dict_transformer(body, transcoder=t)
+    return t.headers, t.values
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("input_file", type=argparse.FileType("r"))
     parser.add_argument("-i", "--indent", action="store_true", default=False)
+    parser.add_argument("-r", "--reverse", action="store_true", default=False)
     args = parser.parse_args(argv)
 
     with args.input_file as f:
-        for l in csv2json(f):
-            print(json.dumps(l, indent=4 if args.indent else None), end="\n\n")
+        if args.reverse:
+            headers, values = json2csv_headers(f.read())
+            print(f"headers: {','.join(headers)}")
+            print(f"values: {','.join(map(str, values))}")
+        else:
+            for l in csv2json(f):
+                print(json.dumps(l, indent=4 if args.indent else None), end="\n\n")

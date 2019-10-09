@@ -167,6 +167,31 @@ assert headers2template(headers, options=options).render_as_dict(["", "", ""]) =
 # - it is also optional
 ```
 
+## JSON to headers
+
+The function `json2csv_headers` may be used to evaluate what *could* be the headers of a CSV input based on a JSON.
+This function only get a JSON string and returns a list of headers and a list of values extracted from the JSON string.
+
+Sample
+
+``` python
+json2csv_headers('{"a": "true","b": null}') == (["a", "b"], ["true", None])
+```
+
 ## CLI
 
+### csv2json
+
 The package provide an handy CLI command to turn CSV inputs to JSON outputs, just type `csv2json -h`
+
+### json2csv
+
+Use the flag '-r' for the command `csv2json` to extrapolate from a JSON, what the headers might be.
+
+Sample
+
+``` bash
+echo '{"a": 1, "b": ["toto", {"test": "bar"}, 1, 3]}' | csv2json -r -
+headers: a,b.0,b.1.test,b.2,b.3
+values: 1,toto,bar,1,3
+```

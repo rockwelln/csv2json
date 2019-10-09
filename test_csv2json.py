@@ -6,7 +6,7 @@ try:
 except ImportError:
     tqdm = list
 
-from csv2json import headers2template
+from csv2json import headers2template, json2csv_headers
 
 # samples (default options)
 
@@ -126,3 +126,21 @@ def test_optional_multi_level():
     assert headers2template(headers, options=options).render_as_dict(["", "", ""]) == {
         "abc": []
     }
+
+
+# test json to csv
+
+
+def test_empty_json_2_csv():
+    assert json2csv_headers("{}") == ([], [])
+
+
+def test_json_with_null_2_csv():
+    assert json2csv_headers('{"a": "true","b": null}') == (["a", "b"], ["true", None])
+
+
+def test_json_2_csv():
+    assert json2csv_headers('{"a": "true","b": [1, {"f": 2}, 234]}') == (
+        ["a", "b.0", "b.1.f", "b.2"],
+        ["true", 1, 2, 234],
+    )

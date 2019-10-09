@@ -21,6 +21,14 @@ class DictTranscoder:
         return e
 
     def on_collection(self, e, path):
+        if type(e) is dict and all(k.isdigit() for k in e.keys()):
+            l = [self.get_collection_fill_value(path)] * (
+                max(int(k) for k in e.keys()) + 1
+            )
+            for k, v in e.items():
+                if v is not drop_entry:
+                    l[int(k)] = v
+            return l
         return e
 
     def get_collection_fill_value(self, path):
@@ -56,6 +64,8 @@ class DictOptionsTranscoder(DictTranscoder):
         return e
 
     def on_collection(self, e, path):
+        e = super().on_collection(e, path)
+
         o = self.options.get(".".join(path), None)
         if not o:
             return e
@@ -78,24 +88,10 @@ def dict_transformer(
         path = []
     if transcoder is None:
         transcoder = DictTranscoder()
-    if not isinstance(indict, Iterable) or isinstance(indict, str):
+    if not isinstance(indict, Iterable) or isinstance(indict, (str, bytearray, bytes)):
         return transcoder.on_leaf(indict, path)
 
     if isinstance(indict, dict):
-        if all(k.isdigit() for k in indict.keys()):
-            l = [transcoder.get_collection_fill_value(path)] * (
-                max(int(k) for k in indict.keys()) + 1
-            )
-            for k, v in indict.items():
-                v = (
-                    v
-                    if isinstance(v, (str, bool, int))
-                    else dict_transformer(v, path + [k], transcoder=transcoder)
-                )
-                if v is not drop_entry:
-                    l[int(k)] = v
-            return transcoder.on_collection(l, path)
-
         d = {}
         for key, v in indict.items():
             v = dict_transformer(v, path + [key], transcoder=transcoder)

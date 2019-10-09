@@ -145,6 +145,28 @@ will produce the output:
 }
 ```
 
+#### multi-level
+
+This may affect the output structure on several levels.
+
+Sample:
+``` python
+headers = "abc.0,foo.0,foo.1".split(",")
+options = {
+    "abc.0": {"optional": len},
+    "foo": {"optional": len},
+    "foo.0": {"optional": len},
+    "foo.1": {"optional": len},
+}
+assert headers2template(headers, options=options).render_as_dict(["", "", ""]) == {
+    "abc": []
+}
+# "foo" does not appear in the output because of 3 factors:
+# - all its sub-items are optional
+# - all its sub-items are dropped
+# - it is also optional
+```
+
 ## CLI
 
 The package provide an handy CLI command to turn CSV inputs to JSON outputs, just type `csv2json -h`

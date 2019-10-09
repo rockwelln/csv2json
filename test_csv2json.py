@@ -113,3 +113,16 @@ def test_with_options_perf():
     for _ in tqdm(range(n)):
         t.render_as_dict(["1", "2", "2019-02-01T01:01:01", "0", ""])
     print(f"completed {n} complex resolution in {time.time() - start}")
+
+
+def test_optional_multi_level():
+    headers = "abc.0,foo.0,foo.1".split(",")
+    options = {
+        "abc.0": {"optional": len},
+        "foo": {"optional": len},
+        "foo.0": {"optional": len},
+        "foo.1": {"optional": len},
+    }
+    assert headers2template(headers, options=options).render_as_dict(["", "", ""]) == {
+        "abc": []
+    }

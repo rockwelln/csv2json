@@ -194,10 +194,10 @@ def csv2json(input_stream, *, headers=None, options=None) -> List[Dict]:
 
 def main(argv=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("input_file")
+    parser.add_argument("input_file", type=argparse.FileType("r"))
     parser.add_argument("-i", "--indent", action="store_true", default=False)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    with open(args.input_file, "r") as f:
+    with args.input_file as f:
         for l in csv2json(f):
             print(json.dumps(l, indent=4 if args.indent else None), end="\n\n")

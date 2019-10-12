@@ -8,6 +8,9 @@ except ImportError:
 
 from csv2json import headers2template, json2csv_headers
 
+
+fromisoformat = lambda a: datetime.datetime.strptime(a, "%Y-%m-%dT%H:%M:%S")
+
 # samples (default options)
 
 
@@ -72,7 +75,7 @@ def test_with_options_types():
     headers = "abc.3,status".split(",")
     options = {
         "abc.3": {"infer_type": True},  # prio 1
-        "status": {"render": datetime.datetime.fromisoformat},  # prio 4
+        "status": {"render": fromisoformat},  # prio 4
     }
     assert headers2template(headers, options=options).render_as_dict(
         ["1", "2019-02-01T01:01:01"]
@@ -87,7 +90,7 @@ def test_with_options_on_value():
     options = {
         "abc.3": {"infer_type": True},
         "abc": {"fill_value": 0},
-        "status": {"render": datetime.datetime.fromisoformat},
+        "status": {"render": fromisoformat},
         "foo": {"optional": len},
     }
     assert headers2template(headers, options=options).render_as_dict(
@@ -105,7 +108,7 @@ def test_with_options_perf():
     options = {
         "abc.3": {"infer_type": True},
         "abc": {"fill_value": 0},
-        "status": {"render": datetime.datetime.fromisoformat},
+        "status": {"render": fromisoformat},
         "foo": {"optional": len},
     }
     start = time.time()

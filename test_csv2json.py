@@ -133,10 +133,12 @@ def test_optional_multi_level():
 
 def test_empty_json_2_csv():
     assert json2csv_headers("{}") == ([], [])
+    assert json2csv_headers({}) == ([], [])
 
 
 def test_json_with_null_2_csv():
     assert json2csv_headers('{"a": "true","b": null}') == (["a", "b"], ["true", None])
+    assert json2csv_headers({"a": "true", "b": None}) == (["a", "b"], ["true", None])
 
 
 def test_json_2_csv():

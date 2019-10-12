@@ -3,7 +3,7 @@ import sys
 import json
 import argparse
 
-from typing import List, Dict, Any, Optional, AnyStr
+from typing import List, Dict, Any, Optional, AnyStr, Union
 from dataclasses import dataclass
 from collections import defaultdict
 from collections.abc import Iterable, Callable
@@ -211,8 +211,8 @@ class Dict2CsvTranscoder(DictTranscoder):
         return e
 
 
-def json2csv_headers(instr: str):
-    body = json.loads(instr)
+def json2csv_headers(instr: Union[AnyStr, dict]) -> List[List[Any]]:
+    body = json.loads(instr) if isinstance(instr, (str, bytearray, bytes)) else instr
     t = Dict2CsvTranscoder()
     dict_transformer(body, transcoder=t)
     return t.headers, t.values

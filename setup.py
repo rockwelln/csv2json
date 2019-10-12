@@ -16,7 +16,7 @@ setup(
     entry_points={"console_scripts": ["csv2json=csv2json:main"]},
     install_requires=["dataclasses; python_version < '3.7'"],
     extras_require={
-        "dev": ["pytest", "pytest-cov", "black", "wheel"],
+        "dev": ["pytest", "pytest-cov", "black", "wheel", "twine"],
         "test": ["pytest", "pytest-cov"],
     },
     classifiers=[

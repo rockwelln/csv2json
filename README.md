@@ -80,10 +80,11 @@ Sample:
 
 ``` python
 options = {
-    "abc": {"infer_type": True}
+    "abc": {"infer_type": True},
+    "ghi": {"infer_type": True},
 }
-headers = "abc,def"
-data = ["1", "2"]
+headers = "abc,def,ghi"
+data = ["1", "2", "g,h,i"]
 ```
 
 will produce the output:
@@ -91,7 +92,8 @@ will produce the output:
 ```json
 {
     "abc": 1,
-    "def": "2"
+    "def": "2",
+    "ghi": ["g", "h", "i"]
 }
 ```
 
@@ -99,6 +101,7 @@ will produce the output:
 
 * int
 * bool
+* array
 
 ### render
 

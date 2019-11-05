@@ -72,16 +72,18 @@ def test_basic_perf():
 
 
 def test_with_options_types():
-    headers = "abc.3,status".split(",")
+    headers = "abc.3,status,def".split(",")
     options = {
-        "abc.3": {"infer_type": True},  # prio 1
-        "status": {"render": fromisoformat},  # prio 4
+        "abc.3": {"infer_type": True},
+        "def": {"infer_type": True},
+        "status": {"render": fromisoformat},
     }
     assert headers2template(headers, options=options).render_as_dict(
-        ["1", "2019-02-01T01:01:01"]
+        ["1", "2019-02-01T01:01:01", "d,e,f"]
     ) == {
         "abc": [None, None, None, 1],
         "status": datetime.datetime(2019, 2, 1, 1, 1, 1),
+        "def": ["d", "e", "f"],
     }
 
 

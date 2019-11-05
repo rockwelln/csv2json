@@ -42,6 +42,8 @@ def infer_type(o: str) -> Any:
         return True
     if o.lower() == "false":
         return False
+    if "," in o:
+        return o.split(",")
     return o
 
 

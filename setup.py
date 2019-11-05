@@ -8,7 +8,7 @@ setup(
     author_email="denayer.norman@gmail.com",
     description="turns csv entries to json entries based on csv headers",
     url="https://github.com/rockwelln/csv2json",
-    version="0.1.0",
+    version="0.2.0",
     license="MIT",
     keywords="csv JSON",
     python_requires=">=3.6",

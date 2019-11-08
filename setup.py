@@ -3,12 +3,12 @@ from setuptools import setup
 
 
 setup(
-    name="csv2json",
+    name="nx_csv2json",
     author="Norman Denayer",
     author_email="denayer.norman@gmail.com",
     description="turns csv entries to json entries based on csv headers",
     url="https://github.com/rockwelln/csv2json",
-    version="0.2.0",
+    version="0.3.0",
     license="MIT",
     keywords="csv JSON",
     python_requires=">=3.6",

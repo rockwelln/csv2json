@@ -60,12 +60,23 @@ def test_basic_types_conservation():
 
 def test_basic_perf():
     headers = "abc.5.3.def,abc.1,status,foo.bar".split(",")
-    n = 1_000_000
+    n = 10_000
     start = time.time()
     t = headers2template(headers)
     for _ in tqdm(range(n)):
         t.render_as_dict(["3", "1", datetime.datetime(2019, 11, 1), True])
     print(f"completed {n} basic resolution in {time.time() - start}")
+
+
+def test_multiple_rows():
+    headers = "a,b,c".split(",")
+    t = headers2template(headers)
+    for a, b, c in ["abc", "def", ("1", "345345", "abc")]:
+        assert t.render_as_dict([a, b, c]) == {
+            "a": a,
+            "b": b,
+            "c": c,
+        }
 
 
 # sample with options
@@ -105,7 +116,7 @@ def test_with_options_on_value():
 
 
 def test_with_options_perf():
-    n = 1_000_000
+    n = 10_000
     headers = "abc.0,abc.3,status,item1.subitem1,foo".split(",")
     options = {
         "abc.3": {"infer_type": True},

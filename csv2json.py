@@ -15,8 +15,11 @@ drop_entry = object()
 
 
 class DictTranscoder:
+    def __init__(self, resolve_values=True):
+        self.resolve_values = resolve_values
+
     def on_leaf(self, e, path):
-        if isinstance(e, TemplateValue):
+        if isinstance(e, TemplateValue) and self.resolve_values:
             e = e.v
         return e
 
@@ -49,6 +52,7 @@ def infer_type(o: str) -> Any:
 
 class DictOptionsTranscoder(DictTranscoder):
     def __init__(self, options):
+        super().__init__()
         self.options = options
 
     def on_leaf(self, e, path):
@@ -124,19 +128,17 @@ class TemplateTree:
         return value
 
     def render_as_dict(self, options: Optional[Dict] = None) -> Dict:
-        if self._dict_cache:
-            return self._dict_cache
+        if not self._dict_cache:
+            _tr = DictTranscoder
+            if options:
 
-        _tr = DictTranscoder
-        if options:
+                class _tr(DictTranscoder):
+                    def get_collection_fill_value(self, path):
+                        o = options.get(".".join(path), None)
+                        return o and o.get("fill_value", None)
 
-            class _tr(DictTranscoder):
-                def get_collection_fill_value(self, path):
-                    o = options.get(".".join(path), None)
-                    return o and o.get("fill_value", None)
-
-        self._dict_cache = dict_transformer(self._d, transcoder=_tr())
-        return self._dict_cache
+            self._dict_cache = dict_transformer(self._d, transcoder=_tr(resolve_values=False))
+        return dict_transformer(self._dict_cache, transcoder=DictTranscoder())
 
 
 @dataclass
@@ -196,6 +198,7 @@ def csv2json(input_stream, *, headers=None, options=None) -> List[Dict]:
 
 class Dict2CsvTranscoder(DictTranscoder):
     def __init__(self):
+        super().__init__()
         self.headers = []
         self.values = []
 

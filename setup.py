@@ -2,12 +2,18 @@
 from setuptools import setup
 
 
+with open("README.md", "r") as f:
+    long_description = f.read()
+
+
 setup(
     name="nx_csv2json",
     author="Norman Denayer",
     author_email="denayer.norman@gmail.com",
     description="turns csv entries to json entries based on csv headers",
     url="https://github.com/rockwelln/csv2json",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     version="0.3.0",
     license="MIT",
     keywords="csv JSON",

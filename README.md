@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/nx-csv2json.svg)](https://badge.fury.io/py/nx-csv2json)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # CSV 2 JSON
 
 Library to convert an CSV into python dict.
